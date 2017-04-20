@@ -266,12 +266,22 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         return _delegate?.textFieldShouldReturn?(textField) ?? true
     }
 
-    // MARK: - UITextInput
+    // MARK: - UIKeyInput
 
     open override func deleteBackward() {
         guard self.text != "+" else {
             return
         }
         super.deleteBackward()
+    }
+
+    open override func insertText(_ text: String) {
+        let range: NSRange
+        if let currentText: String = self.text {
+            range = NSRange.init(location: currentText.characters.count, length: 0)
+        } else {
+            range = NSRange.init(location: 0, length: 0)
+        }
+        _ = self.textField(self, shouldChangeCharactersIn: range, replacementString: text)
     }
 }
